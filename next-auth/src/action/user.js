@@ -1,21 +1,53 @@
-"use server"
+"use server";
 
-const register = async (formData) =>{
+import { User } from "@/app/Models/User";
+import connectDB from "@/lib/db";
+import { redirect } from "next/navigation";
+import {hash} from "bcryptjs";
+import { signIn } from "next-auth/react";
+import { CredentialsSignin } from "next-auth";
 
-    const firstname = formData.get("firstname");
-    const lastname = formData.get("lastname");
-    const email = formData.get("email");
-    const password = formData.get("password");
-    
-    if(!firstname || !lastname || !email || !password){
-        throw new Error("Please fill all the fields")
-    }
+const login = async(formData) => {
+  const email = formData.get("email");
+  const password = formData.get("password");
 
-    await connectDB();
+  try {
+    await signIn('credentials',{
+      redirect: false,
+      callbackUrl: '/',
+      email,
+      password
 
-    const existinguser = await User.findOne({email});
-    if(existinguser){
-        throw new Error("Email already exists")
-    }
+    })
+  } catch (error) {
+    const someError = error as CredentialsSignin ;
+    return someError.cause;
+  }
 }
-export {register};
+
+const register = async (formData) => {
+  const firstName = formData.get("firstname"); // Adjusted case
+  const lastName = formData.get("lastname"); // Adjusted case
+  const email = formData.get("email");
+  const password = formData.get("password");
+
+  if (!firstName || !lastName || !email || !password) {
+    throw new Error("Please fill all the fields");
+  }
+
+  await connectDB();
+
+  const existingUser = await User.findOne({ email });
+  if (existingUser) {
+    throw new Error("Email already exists");
+  }
+
+  const hashedPassword = await hash(password, 10);
+
+  await User.create({ firstName, lastName, email, password: hashedPassword });
+  console.log("Successfully created");
+
+  return redirect("/Login");
+};
+
+export { register,login };
