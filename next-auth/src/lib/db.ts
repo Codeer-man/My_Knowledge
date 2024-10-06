@@ -2,16 +2,18 @@ import mongoose from "mongoose";
 
 const connectDB = async () => {
   try {
-    const MongoUrl = process.env.MONGODB_URL;
-    if (!MongoUrl) throw new Error("Mongourl is not defined");
+    const mongoUrl = process.env.MONGO_URL;
+    if (!mongoUrl) {
+      throw new Error("MONGO_URL is not defined in environment variables.");
+    }
 
-    await mongoose.connect(MongoUrl);
-    console.log("MongoDB connected successfully");
+    await mongoose.connect(mongoUrl);
+    console.log("✅ MongoDB connection successful");
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.error(`❌ MongoDB connection error: ${error.message}`);
     } else {
-      console.error(`�� MongoDB unknown connection error: ${error}`);
+      console.error("❌ Unknown error occurred during MongoDB connection");
     }
     process.exit(1);
   }
