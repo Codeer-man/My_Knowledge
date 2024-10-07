@@ -1,0 +1,31 @@
+docker build: Build an image from a Dockerfile.
+
+docker run: Create and start a container from an image.
+
+docker ps: List running containers.
+
+docker ps -a: List all containers, including stopped ones.
+
+docker stop: Stop a running container by its ID or name.
+
+docker start: Start a stopped container by its ID or name.
+
+docker rm: Remove a stopped container.
+
+docker rmi: Remove an image by its ID or name.
+
+docker images: List all available images on your local machine.
+
+docker exec: Run a command in a running container.
+
+docker logs: View the logs of a container.
+
+docker network ls: List all Docker networks.
+
+docker-compose up: Start services defined in a docker-compose.yml file.
+
+docker-compose down: Stop and remove all services defined in a docker-compose.yml file.
+
+docker pull: Download an image from Docker Hub or a registry.
+
+These commands help manage containers and images efficiently.
