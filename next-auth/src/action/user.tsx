@@ -4,6 +4,25 @@ import connectDB from "@/lib/db";
 import { User } from "@/schema/User";
 import { redirect } from "next/navigation";
 import { hash } from "bcryptjs";
+import { signIn } from "@/auth";
+
+const login = async (formData: FormData) => {
+  const email = formData.get("email") as string;
+  const password = formData.get("password") as string;
+
+  try {
+    await signIn("credentials", {
+      redirect: false,
+      callbackUrl: "/",
+      email,
+      password,
+    });
+  } catch (error) {
+    const someError = error as Error;
+    return someError.cause;
+  }
+  redirect("/");
+};
 
 const register = async (formData: FormData) => {
   const firstName = formData.get("firstname") as string;
@@ -34,4 +53,4 @@ const register = async (formData: FormData) => {
   }
 };
 
-export { register };
+export { register,login };
